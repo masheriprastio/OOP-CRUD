@@ -8,12 +8,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 
+	echo "Username:" . htmlspecialchars($username) . "<br>";
+	echo "Password:" . htmlspecialchars($password) . "<br>";
+
 	// Input data ke database
 	$db->inputData($username, $password);
 
 	// Redirect untuk menghindari pengiriman ulang data
 	header("Location: index.php");
 	exit();
+} elseif (isset($_POST['action']) && $_POST['action'] == 'delete') {
+	$id = $_POST['id'];
+	// $username = $_POST['username'];
+	// $password = $_POST['password'];
+	$db->deleteData($id);
+} else {
+	header("Location: index.php");
 }
 ?>
 <!DOCTYPE html>
@@ -56,17 +66,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						<td><?php echo $row['password']; ?></td>
 						<td>
 							<!-- Tombol Edit -->
-							<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" 
-                                data-id="<?php echo $row['id']; ?>" 
-                                data-username="<?php echo $row['username']; ?>" 
-                                data-password="<?php echo $row['password']; ?>">
-                            Edit
-                        </button>
-                        <!-- Tombol Delete -->
-                        <form method="POST" action="" style="display:inline;">
-                            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                            <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
-                        </form>
+							<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<?php echo $row['id']; ?>" data-username="<?php echo $row['username']; ?>" data-password="<?php echo $row['password']; ?>">
+								Edit
+							</button>
+							<!-- Tombol Delete -->
+							<form method="POST" action="" style="display:inline;">
+							<input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                            <input type="hidden" name="action" value="delete">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+
+							</form>
 
 						</td>
 					</tr>
@@ -105,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	</div>
 
 	<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-	 <script src="assets/js/jquery-3.7.1.min.js"></script>
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
 	<script src="assets/bootstrap-5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 	</body>

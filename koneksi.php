@@ -31,6 +31,12 @@ class koneksi
     
         // mysqli_query($this->koneksi, "INSERT INTO user_login VALUES(' ','$username', '$password')");
     }
+    function deleteData($id){
+        $stmt = $this->koneksi->prepare("DELETE FROM user_login WHERE id=?");
+        $stmt->bind_param("i",$id);
+        $stmt->execute();
+        $stmt->close();
+    }
 }
 
 // $panggil = new koneksi();
