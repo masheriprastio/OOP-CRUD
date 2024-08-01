@@ -5,25 +5,27 @@ $data_user = $db->tampilData();
 
 // Cek apakah form disubmit
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	$username = $_POST['username'];
-	$password = $_POST['password'];
+    if (isset($_POST['action']) && $_POST['action'] === 'delete') {
+        $id = $_POST['id'];
+        $db->deleteData($id);
+        header("Location: index.php");
+        exit();
+    } else {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
-	echo "Username:" . htmlspecialchars($username) . "<br>";
-	echo "Password:" . htmlspecialchars($password) . "<br>";
+        echo "Username:" . htmlspecialchars($username) . "<br>";
+        echo "Password:" . htmlspecialchars($password) . "<br>";
 
-	// Input data ke database
-	$db->inputData($username, $password);
+        // Input data ke database
+        $db->inputData($username, $password);
 
-	// Redirect untuk menghindari pengiriman ulang data
-	header("Location: index.php");
-	exit();
-} elseif (isset($_POST['action']) && $_POST['action'] == 'delete') {
-	$id = $_POST['id'];
-	// $username = $_POST['username'];
-	// $password = $_POST['password'];
-	$db->deleteData($id);
+        // Redirect untuk menghindari pengiriman ulang data
+        header("Location: index.php");
+        exit();
+    }
 } else {
-	header("Location: index.php");
+    // header("Location: index.php");
 }
 ?>
 <!DOCTYPE html>
